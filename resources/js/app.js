@@ -19,7 +19,22 @@ window.Vue = require('vue').default;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+
+import VueAxios from 'vue-axios';
+import axios from 'axios';
+Vue.use(VueAxios, axios);
+
+import store from './store/store';
+
+// Vue.component('header-component', require('./components/layout/HeaderComponent.vue').default);
+// Vue.component('footer-component', require('./components/layout/FooterComponent.vue').default);
+//Import component
+import App from './components/App.vue';
+import HomeComponent from './components/HomeComponent.vue';
+import TaskComponent from './components/TaskComponent.vue';
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -27,6 +42,19 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-});
+//Add router and component for router
+const routes = [
+    {
+        name: 'home',
+        path: '/',
+        component: HomeComponent
+    },
+    {
+        name: 'task',
+        path: '/task/',
+        component: TaskComponent
+    },
+];
+
+const router = new VueRouter({ mode: 'history', routes: routes });
+const app = new Vue(Vue.util.extend({ router, store }, App)).$mount('#app');
